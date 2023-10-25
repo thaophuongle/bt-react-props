@@ -1,6 +1,7 @@
 import React from 'react'
 import { ProductItem } from './ProductItem';
 
+
 export const ProductList = (props) => {
     const {data, handleProductDetail, handleCart} = props
     console.log(data);
