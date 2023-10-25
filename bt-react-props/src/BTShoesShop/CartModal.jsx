@@ -1,7 +1,8 @@
 import React from 'react'
 
-export const CartModal = ({cart}) => {
+export const CartModal = ({cart, handleCartQuantity, deleteCart}) => {
     //const {cart} = props
+    console.log(cart);
   return (
     <div
     className="modal fade"
@@ -10,7 +11,7 @@ export const CartModal = ({cart}) => {
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
   >
-    <div className="modal-dialog modal-lg">
+    <div className="modal-dialog modal-xl">
       <div className="modal-content">
         <div className="modal-header">
           <h1 className="modal-title fs-5" id="cartModalLabel">
@@ -24,10 +25,14 @@ export const CartModal = ({cart}) => {
           />
         </div>
         <div className="modal-body">
-            <table className="table">
+            {!cart.length && <h2 className='text-center'>Please choose a product</h2>}
+
+            {/* !!cart = true */}
+            {!!cart.length && (
+                <table className="table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>STT</th>
                         <th>Image</th>
                         <th>Name</th>
                         <th>Description</th>
@@ -40,29 +45,32 @@ export const CartModal = ({cart}) => {
                 <tbody>
                     {
                         cart.map((product, index) => {
-                            return (<tr>
-                                <td>1</td>
+                            return (<tr key={product.id}>
+                                <td>{index + 1}</td>
                                 <td><img style={{
                                     width: 80,
                                     height: 80
-                                }} src="http://svcy3.myclass.vn/images/adidas-prophere.png" alt="" /></td>
-                                <td>Product Name</td>
-                                <td>Product Description</td>
-                                <td>1000</td>
+                                }} src={product.image} alt="" /></td>
+                                <td>{product.name}</td>
+                                <td>{product.description}</td>
+                                <td>{product.price}</td>
                                 <td>
-                                    <button className="btn btn-outline-success">+</button>
-                                    <span className='mx-2'>2</span>
-                                    <button className="btn btn-outline-success">-</button>
+                                    <button className="btn btn-outline-success" onClick={() => {handleCartQuantity(product.id, 1)}}>+</button>
+                                    <span className='mx-2'>{product.cartQuantity}</span>
+                                    <button className="btn btn-outline-success" onClick={() => {handleCartQuantity(product.id, -1)}}>-</button>
                                     </td>
-                                <td>2000</td>
+                                <td>{product.cartQuantity * product.price}</td>
                                 <td>
-                                    <button className="btn btn-outline-dark">X</button>
+                                    <button className="btn btn-outline-dark" onClick={() => {
+                                        deleteCart(product.id)
+                                    }}>X</button>
                                 </td>
                             </tr>)
                         })
                     }
                 </tbody>
             </table>
+            )}
         </div>
         <div className="modal-footer">
           <button
